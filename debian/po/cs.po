@@ -1,0 +1,44 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: checksecurity\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-09-24 19:14+0100\n"
+"PO-Revision-Date: 2005-01-21 14:16+0100\n"
+"Last-Translator: Jan Outrata <outrataj@upcase.inf.upol.cz>\n"
+"Language-Team: Czech <provoz@debian.cz>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Description
+#: ../templates:3
+msgid "Merge old configuration"
+msgstr "Slouèení staré konfigurace"
+
+#. Description
+#: ../templates:3
+msgid ""
+"This is your initial install of the checksecurity package, and you had an "
+"existing checksecurity.conf file from the cron package. The old "
+"configuration file was preserved as \"/etc/checksecurity.conf.cron\". If you "
+"had modified your configuration, you may want to merge those changes into "
+"the new /etc/checksecurity.conf file from this package."
+msgstr ""
+"Toto je va¹e prvotní instalace balíèku checksecurity a mìli jste "
+"soubor checksecurity.conf z balíèku cron. Tento starý konfiguraèní "
+"soubor byl zachován jako \"/etc/checksecurity.conf.cron\". Pokud jste "
+"zmìnili nìkterá nastavení, mù¾ete chtít provést tyto zmìny do nového "
+"souboru /etc/checksecurity.conf z toho balíèku."

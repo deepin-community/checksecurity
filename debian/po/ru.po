@@ -1,0 +1,51 @@
+# translation of checksecurity_debconf_ru.po to Russian
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
+#    Developers do not need to manually edit POT or PO files.
+#
+# Yuri Kozlov <kozlov.y@gmail.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.0.7-10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-23 17:13+0100\n"
+"PO-Revision-Date: 2006-11-27 10:15+0300\n"
+"Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
+"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.2\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Merge old configuration"
+msgstr "Добавление старой конфигурации"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"This is your initial install of the checksecurity package, and you had an "
+"existing checksecurity.conf file from the cron package. The old "
+"configuration file was preserved as \"/etc/checksecurity.conf.cron\". If you "
+"had modified your configuration, you may want to merge those changes into "
+"the new /etc/checksecurity.conf file from this package."
+msgstr ""
+"Выполнена только начальная установка пакета checksecurity; в вашей "
+"системе уже был файл checksecurity.conf из пакета cron. Старый "
+"конфигурационный файл будет сохранён под "
+"именем \"/etc/checksecurity.conf.cron\". Если вы делали в нём изменения "
+"самостоятельно, вам может потребоваться "
+"перенести эти изменения в новый файл /etc/checksecurity.conf "
+"этого пакета."
+

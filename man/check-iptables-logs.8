@@ -1,0 +1,33 @@
+.\" -*- nroff -*-
+.TH CHECK-IPTABLES-LOGS 8 "21 February 2015" "Debian Linux"
+.SH NAME
+check-iptables-logs \- check iptables logs for intrusion attempts
+.SH SYNOPSIS
+.B check-iptables-logs
+.SH DESCRIPTION
+The
+.B check-iptables-logs
+is a plugin run by the
+.B checksecurity
+.B checksecurity
+command. It scans system logs and makes a summary of intrusion attempts
+that have been logged through the use of 
+.B iptables
+
+The information extracted is printed on the standard output.
+.SH FILES
+.TP
+.I /etc/checksecurity.conf
+The configuration file for the 
+.B checksecurity
+program. This file defines whether this plugin will be run or not
+and how often will be executed.
+
+.TP
+.I /var/log/messages
+The log file used (by default) to extract information from iptables logs.
+
+.SH "SEE ALSO"
+See also
+.BR checksecurity (8),
+.BR iptables (8)

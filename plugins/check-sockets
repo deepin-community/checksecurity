@@ -1,0 +1,112 @@
+#!/bin/sh
+#
+# Check-sockets checksecurity plugin 
+#
+# This script is designed to find the TCP/UDP sockets bound present on the
+# system
+# 
+# It is part of the 'checksecurity' package, and tests may be configured
+# by the global file '/etc/checksecurity.conf' and the file 
+# '/etc/checksecurity/check-sockets.conf'.
+#
+# This check was based on the 'bound sockets' check available in SuSE's
+# seccheck package
+#
+# Copyright (C) 1999 Marc Heuse <marc@suse.de>
+# Copyright (C) 2007 Javier Fernandez-Sanguino <jfs@debian.org>
+#
+# Licensed under the GNU General Public License
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+set -e
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+
+umask 027
+cd /
+
+if [ -e /etc/checksecurity/check-socket.conf ]
+then
+   . /etc/checksecurity/check-socket.conf
+fi
+
+if [ `/usr/bin/id -u` != 0 ] ; then
+   echo "Only root has permission to run this script"
+   exit 1
+fi
+if [ ! -x /usr/bin/lsof ] ; then
+    # Exit silently, lsof is not installed
+   exit 0
+fi
+
+TMPSOCKET=${LOGDIR:=/var/log/checksecurity}/sockets.new.tmp
+TMPDIFF=${LOGDIR:=/var/log/checksecurity}/sockets.diff.tmp
+
+# Guard against undefined vars
+[ -z "$LOGDIR" ] && LOGDIR=/var/log/checksecurity
+[ -z "$CHECKSECURITY_IGNORELINES" ] && CHECKSECURITY_IGNORELINES="^$"
+if [ ! -e "$LOGDIR" ] ; then
+    echo "ERROR: Log directory $LOGDIR does not exist"
+    exit 1
+fi
+
+cd $LOGDIR
+
+test -f sockets.today || touch sockets.today
+
+# display programs with TCP/UDP bound sockets
+
+set -o noglob
+
+printf "\nThe following programs have got bound sockets:\n" >$TMPSOCKET
+
+# TODO: (jfs) Enhance using netstat if lsof is not available.
+# use the code @Tiger to do this.
+# TODO: (jfs) Make it possible to remove 
+/usr/bin/lsof -i -n -P | 
+egrep 'UDP|TCP.*LISTEN' |
+egrep -v 'UDP.*->.*' |
+sed 's/....[0-9]u  IP.*     /   /' | 
+sed 's/  FD   TYPE DEVICE SIZE NODE NAME/PROTO PORT/' | 
+sed 's/ [0-9][0-9]* / /' | 
+sed 's/ PID / /'| 
+sed -e 's/[ \t]\+/ /g' | 
+egrep -v "$CHECKSECURITY_IGNORELINES" |
+sort -u  >>$TMPSOCKET
+set +o noglob
+
+if cmp -s sockets.today $TMPSOCKET >/dev/null
+then
+    :
+else
+	diff -U0 sockets.today $TMPSOCKET >> $TMPDIFF || [ $? = 1 ]
+	echo "`hostname` changes to TCP/UDP bound sockets:" 
+	cat $TMPDIFF 
+	
+	if [ `cat $TMPDIFF | wc -l` -gt 0 -a ! -z "$CHECKSECURITY_EMAIL" ]; then
+		/usr/bin/mail -s "Socket changes for `hostname -f` on `date '+%D %T'`" $CHECKSECURITY_EMAIL < $TMPDIFF
+	fi
+	
+        cp $TMPDIFF sockets.changes
+	mv sockets.today sockets.yesterday
+	mv $TMPSOCKET sockets.today
+        chown root:adm sockets.today
+fi
+rm -f $TMPDIFF
+rm -f $TMPSOCKET
+
+exit 0

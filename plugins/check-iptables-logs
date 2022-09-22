@@ -1,0 +1,126 @@
+#!/usr/bin/perl -w
+
+# Script to list filtered IPs based on messages log
+# Assumes daily rotation of logfile.
+
+# (C) Javier Fernandez-Sanguino <jfs@debian.org>, 2010
+#
+# Redistributable under the terms of the GPL - see
+# <http://www.gnu.org/copyleft/gpl.html>
+
+
+# Command line options
+use Getopt::Std;
+use vars qw[$opt_d $opt_f $opt_c $opt_a];
+getopts('df:c:a:');
+$debug = $opt_d || 0;
+
+# Configuration
+my $logfile =  $opt_f || "/var/log/messages"; # Logfile
+my $frequency = 7 ;                  # How many days is the logfile rotated in
+				     # default is weekly
+my $max_connects = $opt_c || 5;      # Number of events to report (over this)
+my $max_attacks = $opt_a || 10; 	     # Number of attacks to report (over this)
+
+# Variables
+my %hosts;
+
+-e "$logfile" || die "Configured logfile $logfile does not exist";
+
+if ( $logfile =~ /.gz$/ ) {
+	open(F, "zcat $logfile |")
+		or die "Eek, problems opening logfile $logfile: $! $?\n";
+} else {
+	open(F, "<$logfile")
+		or die "Eek, problems opening logfile $logfile: $! $?\n";
+}
+
+while(<F>) {
+	chomp; 
+	next unless /kernel: /;
+	print "DEBUG: Analysing '$_' \n" if $debug  > 2;
+
+	if ( /SRC=([\d.]+)\s+.*DPT=(\d+)/ ) {
+		my $ip = $1;
+		my $port = $2;
+# TODO - resolve port to name 1 time
+		$ports{$port}++;
+		$filter{$port}{$ip}++;
+		print "DEBUG: Found blacklisted connection from $ip (to port $port)\n" if $debug ;
+	}
+	if ( /.*BLACKLISTED.*SRC=([\d.]+)\s+.*DPT=(\d+)/ ) {
+		my $ip = $1;
+		my $port = $2;
+# TODO - resolve IP to name 1 time
+		$blacklisted{$ip}++;
+		$blackports{$ip}{$port}++;
+		print "DEBUG: Found blacklisted connection from $ip (to port $port)\n" if $debug;
+	}
+}
+
+
+close(F)
+	or warn "problems closing logfile: $! $?\n";
+
+@blackhosts = keys %blacklisted;
+@attackedports = keys %ports;
+#@badhosts=grep {$hosts{$_}>${max_connects}} keys %hosts;
+
+print "Reporting attacks blocked by iptables filter\n\n";
+print "-" x 50;
+print "\n";
+print "Number of maximum connections: ${max_connects} (per port)\n";
+print "Number of maximum attacks: ${max_attacks} (per host)\n";
+print "\n";
+print "\n";
+
+
+print "-" x 50;
+print "\n";
+print "List of relevant blacklisted hosts\n";
+print "-" x 50;
+print "\n";
+print "\n";
+
+if ($#blackhosts > 0) {
+	print "Blacklisted hosts (total hosts: $#blackhosts)\n";
+	foreach $host ( sort { $blacklisted{$b} <=> $blacklisted{$a} } keys %blacklisted ) {
+		if ( $blacklisted{$host} > ${max_connects} ) {
+			print "\t$host - $blacklisted{$host}\n " ;
+# TODO - DNS resolution for all IP hosts
+			foreach $port ( sort { $blackports{$host}{$b} <=> $blackports{$host}{$a} } keys %{$blackports{$host}} ) {
+				print "\t\t$port - $blackports{$host}{$port}\n";
+			}
+		}
+	}
+} else {
+	print "WARNING: Did not found any blacklisted host $logfile\n";
+}
+
+
+# Attacks
+
+print "-" x 50;
+print "\n";
+print "List of relevant attacked ports\n";
+print "-" x 50;
+print "\n";
+print "\n";
+
+if ($#attackedports > 0) {
+	print "Attacked ports (total ports: $#attackedports)\n";
+	foreach $port ( sort { $ports{$b} <=> $ports{$a} } keys %ports ) {
+		if ( $ports{$port} > ${max_connects} ) { 
+			print "\t$port - $ports{$port} hits\n";
+			foreach $host ( sort { $filter{$port}{$b} <=> $filter{$port}{$a} } keys %{$filter{$port}} ) {
+				print "\t\t$host - $filter{$port}{$host}\n" if $filter{$port}{$host} > ${max_attacks};
+			}
+		}
+	}
+} else {
+	print "WARNING: Did not found any filtered attacks in $logfile\n";
+}
+
+
+exit 0;
+

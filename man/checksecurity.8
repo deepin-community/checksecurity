@@ -1,0 +1,60 @@
+.\" -*- nroff -*-
+.TH CHECKSECURITY 8 "2 February 1997" "Debian Linux"
+.SH NAME
+checksecurity \- Run a collection of simple system checks
+.SH SYNOPSIS
+.B checksecurity
+.SH DESCRIPTION
+The
+.B checksecurity
+command runs a small collection of simple system checks which are designed
+to catch a few common security issues.
+.B checksecurity
+is run by 
+.B cron
+in a daily basis.
+.SH CONFIGURATION
+The
+.B checksecurity.conf
+file defines several configuration variables:
+.BR MAILTO,
+.BR CHECK_DISKFREE ,
+.BR CHECK_PASSWD 
+and 
+.BR CHECK_SETUID 
+.BR LOGDIR .
+Each is described below.
+.PP
+The checksecurity program works with a collection of plugins which are
+located in /usr/share/checksecurity and are configured individually by
+their own configuration file.
+
+.B CHECK_PASSWD
+If this is set to 
+.B TRUE
+then the check-passwd script will be invoked.  This script is designed to
+report upon system accounts which have no passwords.
+.B CHECK_DISKFREE
+If this is set to
+.B TRUE
+then the check-diskfree script will be invoked and will allow an alert
+to be sent if there is any mounted partition is running short on disk
+space.
+.B CHECK_SETUID
+If this is set to
+.B TRUE
+then the check-setuid script will be invoked, this will compare the
+setuid binaries upon the system to those that existed previously and
+show the differences.
+.SH FILES
+.TP
+.I /etc/checksecurity.conf
+checksecurity configuration file
+
+.SH "SEE-ALSO"
+See also 
+.BR check-diskfree (8),
+.BR check-setuid (8),
+.BR check-passwd (8)
+and
+.BR check-iptables-logs (8)

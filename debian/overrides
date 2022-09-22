@@ -1,0 +1,2 @@
+checksecurity: no-debconf-config
+checksecurity: postinst-uses-db-input

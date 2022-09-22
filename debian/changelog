@@ -1,0 +1,471 @@
+checksecurity (2.0.16+nmu2) unstable; urgency=medium
+
+  * Non maintainer upload by the Reproducible Builds team.
+  * No source change upload to rebuild on buildd with .buildinfo files.
+
+ -- Holger Levsen <holger@debian.org>  Fri, 01 Jan 2021 19:17:53 +0100
+
+checksecurity (2.0.16+nmu1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Use "find -perm /x" instead of "find -perm +x". Closes: #731944
+
+ -- Andreas Metzler <ametzler@debian.org>  Tue, 29 Dec 2015 14:06:01 +0100
+
+checksecurity (2.0.16) unstable; urgency=medium
+
+  * plugins/check-setuid: Prevent error from find by putting
+    -ignore_readdir_race as first option (Closes: 714152)
+  * plugins/check-iptables-logs, man/check-iptables-logs.8: Add new plugin to
+    check for iptables logs and provide information of attacked ports,
+    blacklisted hosts (using fail2ban), etc.
+  * etc/global-checksecurity.conf: Add information for the new plugin, this is 
+    disabled by default (as systems might not have iptables configured and,
+    even if enabled, there might not be a log target)
+  * man/{check-diskfree.8,check-passwd.8,check-setuid.8}: Clarify that these
+    plugins are written to be run by checksecurity. Some of the plugins might 
+    not work if missing some environment variables (which are defined by
+    checksecurity)
+  * man/checksecurity.8: Add a reference to the new plugin check-iptables-logs
+  * debian/control: Improve the package description with the recommendations
+    made by Justin B Rye (Closes: #688070) 
+  * debian/control: Add debsecan to the Recommends, this provides notification
+    of vulnerabilities in the system and security updates (Closes: #253097)
+  * etc/check-setuid.conf: Exclude more filesystems for the setuid checks as
+    are system based filesystems
+  * debian/po/tr.po: Add Turkish translation provided by Mert Dirik 
+    (Closes: #759874)
+
+ -- Javier Fernández-Sanguino Peña <jfs@debian.org>  Sat, 21 Feb 2015 15:35:45 +0100
+
+checksecurity (2.0.15) unstable; urgency=medium
+
+  * Fix bug in the CS_NFSAFS definition in etc/check-setuid.conf that prevents
+    the script from matching any filesystem. This bug was, actually, making the
+    script not do anything in the default configuration. (Closes: 724687)
+
+    Thanks go to Alessandro Vesely for spotting this bug and providing a fix.
+
+  * debian/control: Adjust the maintainer's name
+
+ -- Javier Fernández-Sanguino Peña <jfs@debian.org>  Sat, 28 Sep 2013 23:31:59 +0200
+
+checksecurity (2.0.14) unstable; urgency=low
+
+  * plugins/check-setuid:
+       - Integrate changes to from Ubuntu to make use of ionice when calling
+         find. (Closes: #578640)
+       - Use the -ignore_readdir_race option when calling find to avoid
+         error messages when encountering stale files (Closes: #583809)
+  * etc/global-checksecurity.conf: Adjust comments associated to  
+    CHECKSECURITY_EMAIL to point to bsd-mailx instead of mailx and 
+    remove reference to cron. (Closes: #541636)
+  * debian/control: Depend on util-linux (>= 2.15~rc1-1) which provides
+    ionice.
+  * debian/compat: Change from 4 to 5
+  * debian/rules: Adjust calls to dh_clean
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@debian.org>  Wed, 27 Oct 2010 23:44:51 +0200
+
+checksecurity (2.0.13ubuntu2) lucid; urgency=low
+
+  [ Matt Zimmerman ]
+  * plugins/check-setuid: Use ionice to set idle I/O scheduling priority for
+    find(1) across the whole filesystem.
+
+  [ James Westby ]
+  * plugins/check-setuid: Use the -t option to ionice so that failures to set
+    I/O priority don't stop the command running.
+    - Depend on util-linux (>= 2.15~rc1-1) to ensure the feature is available.
+    - Thanks Colin Watson.
+
+ -- James Westby <james.westby@ubuntu.com>  Wed, 21 Apr 2010 13:45:42 +0100
+
+
+checksecurity (2.0.13) unstable; urgency=low
+
+  * Do not report 'disk full' for filesystems mounted under /media.
+    This includes the cdrom as well as possibly some other removal
+    media like USB memories. Thanks to Tim Connors for
+    detecting this bug and providing a patch (Closes: #514306)
+  * Add some information in the both check-setuid's manpage and the
+    configuration file related to false positives generated from /dev changes
+    when a system is rebooted (due to changes in timestamps). And provide
+    instructions on how to remove them.
+  * Extend check-socket to make it possible to exclude certain lines from
+    the output through the CHECKSECURITY_IGNORELINES variable. 
+    (Closes: #522749)
+  * Added the 'lustre' filesystem to the network filesystem list in
+    the default check-setuid.conf (Closes: #502421)
+  * Change Makefile to include etc/check-socket.conf in the package.
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@debian.org>  Tue, 26 May 2009 01:14:49 +0200
+
+checksecurity (2.0.12) unstable; urgency=medium
+
+  * Fix bug in plugins/check_sockets which prevented it from being 
+    actually useful. Thanks to Richard Kapolnai for detecting this
+    bug and providing a patch. (Closes: #520654)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@debian.org>  Sat, 21 Mar 2009 23:46:07 +0100
+
+checksecurity (2.0.11) unstable; urgency=low
+
+  * Debconf Translation changes:
+    - Included Portuguese debconf translation, submitted by Rui Branco (Closes: 489378)
+    - Fixed "Project-Id-Version" field in Japanese translation
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@debian.org>  Mon, 28 Jul 2008 22:47:07 +0200
+
+checksecurity (2.0.10) unstable; urgency=low
+
+  * Remove chrony from the list of Depends: since it does not actually provide
+    a task scheduler, change it to fcron (Closes: #478203, #479661)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@debian.org>  Tue, 29 Apr 2008 02:46:50 +0200
+
+checksecurity (2.0.9) unstable; urgency=low
+
+  * The "where did I leave my head release"
+  * Acknowledge the 2.0.7-10.1 NMU, the updated PO files from some languages
+    had not been included in the 2.0.7 release
+  * Do not search fuse filesystems by default (Closes: #467299)
+  * Lintian fix: remove debian/files from source (Closes: 451054)
+  * Allow users to select cron facility by depending on cron | anacron |
+    chrony (Closes: 375058)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@debian.org>  Wed, 16 Apr 2008 10:09:03 +0200
+
+checksecurity (2.0.8) unstable; urgency=low
+
+  * Make it (again) a Debian native package.
+  * Add a new check-sockets plugin to check for open sockets. Default
+    configuration will run this daily.
+  * Modify check-setuid so that the changes are actually preserved
+    (no .changes file were getting generated)
+  * Change the logrotate definition so that it will not rotate empty files.
+  * Introduce a /var/log/checksecurity/ where all the new plugin logs
+    will get saved to. Preserve /var/log/setuid for the time being
+    (but it should be moved there)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Tue, 08 May 2007 01:01:34 +0200
+
+checksecurity (2.0.7-11) unstable; urgency=low
+
+  * New translations:
+    - Galician translation provided by Jacobo Tarrio (Closes: #413460)
+    - Italian translation provided by Luca Monducci (Closes: #418173)
+  * Have etc/check-setuid.conf default LOGDIR point to /var/log/setuid
+  * Consistent use of email alerts:
+    - Move the CHECKSECURITY_EMAIL configuration file over to the global
+      checksecurity configuration file as more than one script will use this.
+      (check-setuid and check-diskfree at least)
+    - Make checksecurity preserve the CHECKSECURITY_EMAIL environment variable
+      for all plugins unless redefined in the plugin configuration file.
+    - Make check-diskfree use CHECKSECURITY_EMAIL (instead of MAILTO) to
+      mail the results of the diskfree check to the defined user. 
+     (Closes: #232951)
+  * Remove CHECKSECURITY_GREPOUT definition from check-setuid 
+    (Closes: #334435)
+  * Fix spelling errors in the (root) README.Debian file
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Mon, 07 May 2007 23:48:14 +0200
+
+checksecurity (2.0.7-10.1) unstable; urgency=low
+
+  * Non-maintainer upload to fix longstanding l10n issues
+  * Debconf templates translations:
+    - Swedish added. Closes: #331305
+    - Vietnamese added. Sent during the call for updates of the NMU campaign.
+    - Brazilian Portuguese updated. Sent during the call for updates of
+      the NMU campaign.
+    - Russian added. Sent during the call for updates of the NMU campaign.
+    - Dzongkha added. Sent during the call for updates of the NMU campaign.
+    - Basque added. Sent during the call for updates of the NMU campaign.
+
+ -- Christian Perrier <bubulle@debian.org>  Thu, 16 Nov 2006 06:01:25 +0100
+
+checksecurity (2.0.7-10) unstable; urgency=low
+
+  * Clean up all logfiles on purge as required by policy.
+  * Modified checksecurity.weekly to use its own lockfile and fix the
+    error message. We should not be using the same lockfile as
+    checksecurity.daily since the tests being run by default don't overlap
+    (Closes: #326871)
+  * Use debhelper compatibility version 4
+  * Fixed FSF address in debian/copyright
+  * Updated the debian/copyright file with new authors
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Wed, 21 Sep 2005 00:43:14 +0200
+
+checksecurity (2.0.7-9) unstable; urgency=low
+
+  * Added dependancies for "| debconf-2.0" as requested by Joey Hess
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Thu,  4 Aug 2005 19:08:46 +0200
+
+checksecurity (2.0.7-8) unstable; urgency=low
+
+  * Prevent the setuid checks from traversing AFS filesystems under
+    /vicep (Closes: #320407)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Mon,  1 Aug 2005 21:25:16 +0200
+
+checksecurity (2.0.7-7) unstable; urgency=low
+
+  * Added Vietnamese debconf translation provided by Clytie Siddall (Closes: #309632)
+  * Recommend logwatch as an alternative to logcheck (Closes: #315019)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Sat,  9 Jul 2005 15:43:04 +0200
+
+checksecurity (2.0.7-6) unstable; urgency=low
+
+  * Checksecurity checks if you are root (effective uid) before running and
+    so does the check-passwd plugin too.
+  * Proper GPL header to the checksecurity program as well as to all of
+    the plugins.
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Thu,  7 Apr 2005 09:28:24 +0200
+
+checksecurity (2.0.7-5) unstable; urgency=low
+
+  * Added new configuration files to the conffiles definition (lintian
+    error)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Tue, 22 Mar 2005 02:25:20 +0100
+
+checksecurity (2.0.7-4) unstable; urgency=low
+
+  * Use proper user for the logrotation facility (Closes: #299896) 
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Thu, 17 Mar 2005 09:24:44 +0100
+
+checksecurity (2.0.7-3) unstable; urgency=low
+
+  * Fix postinst's check for files so that the return code is always
+    true, have the script run with -e and add also an 'exit 0'
+    return status in any case. (Closes: #299811)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Thu, 17 Mar 2005 01:19:29 +0100
+
+checksecurity (2.0.7-2) unstable; urgency=low
+
+  * Adopted package (Closes: #298573) 
+  * Have the check_diskfree plugin mail to root the results of the test, if
+    defined. Notice that the environment is currently cleaned up so that
+    it will not work yet properly. This is the patch available in #232951
+  * Fixed the formatting issue in the  check-setuid.8 manpage with the
+    patch provided by Nicolas Francois (Closes: #274428)
+  * Fixed the reference to checksecurity.conf in bin/checksecurity, the
+    message now refers to checksecurity(8) (Closes: #276950)
+  * Create /var/log/setuid with proper permissions (750), also, move the 
+    files in postinst through a loop checking first if they exist 
+    (Closes: #297691)
+  * Rotate /var/log/setuid.changes, /var/log/diskfree.log and
+    /var/log/checksecurity.log through logrotate instead of having this in
+    the cron task, use dh_installlogrotate to install this.
+  * Add Getopt::Long usage to bin/checksecurity and define a debug (-d or
+    --debug option) (currently undocumented)
+  * Introduce a 'period' argument in checksecurity (currently undocumented)
+    which determines what checks should it run:
+     - Modify global-checksecurity.conf so that diskfree and passwd checks
+       are run daily and setuid is run weekly
+     - Create a new checksecurity-weekly cron task that will run setuid
+    This closes two long-standing bugs since users can adjust the 
+    configuration now to their needs. (Closes: #138484, #31902)
+  * Recommend: Tiger, logcheck, and integrity checkers, also
+    suggest some programs to check if newer packages are available, 
+    as bug #163813 has not been closed yet. 
+    This is an interim solution in order to warn users that
+    there are more (advanced) security checks available they might want
+    to implement in addition to checksecurity.
+  * Added Czech po-debconf translation provided by Jan Outrata 
+    (Closes: #291576)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Fri, 11 Mar 2005 08:46:43 +0100
+
+checksecurity (2.0.7-1) unstable; urgency=low
+
+  * Removed obsolete documentation and support for CHECKSECURITY_DISABLE.
+    This is handled in checksecurity.conf now.
+  * Updated version number.
+  * Switched to a non-Debian native package.
+  * Avoid searching for setuid files on filesystems of type shfs and lufs.
+    (Closes: #272402)
+  * Place all the setuid logfiles in /var/log/setuid instead of /var/log.
+    Move existing files into place on upgrade.
+    (Closes: #164665)  (Closes: #59809)
+  * Added the German debconf translation.
+    (Closes: #250944) Thanks to Erik Schanze.
+
+ -- Steve Kemp <skx@debian.org>  Mon, 20 Sep 2004 22:04:11 +0000
+	
+checksecurity (2.0.6) unstable; urgency=low
+
+  * Respect the NMU from Javier, much appreciated.
+  * Cause the cronjob to terminate quietly if checksecurity doesnt exist.
+    (Closes: #240462)
+  * Included cifs in the list of network filesystems to ignore.
+    (Closes: #268058)
+  * Added the nl.po debconf translation.
+    (Closes: #241422) Many thanks to Luk and the l10n-dutch team.
+  * Updated standards version to 3.6.1
+
+ -- Steve Kemp <skx@debian.org>  Fri, 17 Sep 2004 22:02:58 +0000
+
+checksecurity (2.0.5.2) unstable; urgency=low
+
+  * NMU fixing bugs introduced in previous NMU (approved by maintainer)
+    - Preinst now sorts /var/log/setuid.today before the upgrade 
+      (Closes: #239340)
+    - Check_setuid does not guard against CHECKSECURITY_EMAIL being
+      undefined since it's disabled per default (Closes: #239336)
+    - Introduced an alternative fix for the Arla partitions and
+      add new arla type 'nnpfs' and 'binfmt_misc' (Closes: #239314)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Mon, 22 Mar 2004 14:26:13 +0100
+
+checksecurity (2.0.5.1) unstable; urgency=low
+
+  * NMU with maintainer's approval
+   (note this is not related to the BSP, that's why it's uploaded to 0-day)
+    - Added sysfs to CS_TYPES (Closes: #229723)
+    - Updated Spanish debconf translation provided by Javier Fernandez-Sanguino
+      (Closes: #229010)
+    - Added Danish debconf translation provided by Claus Hindsgaul 
+      (Closes: #233705)
+    - Updated Japanese debconf translation provided by Kenshi Muto
+      (Closes: #237781)
+    - Sort setuid files by name instead of by inode # (Closes: #202077)
+    - Guard against undefined vars in check-setuid(Closes: #154390)
+    - Fixed typo in check-diskfree.conf (Closes: #229104)
+    - Added LOGFILE definition in cron task, this would make it easier
+      to switch to a different logfile in order to fix #232951. However,
+      the older LOGFILES would need to be handled in order to avoid
+      cruft in the system.
+    - Added a README.Debian that explains why the conffile is handled 
+      as it is (Closes: #198933)
+    - Check-diskfree now guards agains undefined vars and handles 
+      mount points with spaces in the patch (Closes: #190928)
+    - Added comment in checksecurity.conf file indicating how you can
+      disable check-setuid completely. This will have to suffice
+      until check-security provides a better mechanism for fine-grane
+      control of plugin execution (Closes: #177120)
+    - Filter only xfs mounts if the devine name is arla (Closes: #171980)
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Sun, 14 Mar 2004 22:29:16 +0100
+
+checksecurity (2.0.5) unstable; urgency=low
+
+  * Applied the Brazilian Portuguese translation to Debconf.
+    (Closes: #218818) thanks to Andre Luis Lopes
+  * Applied the updated French debconf translations.
+    (Closes: #213791) thanks to  Christian Perrier.
+  * No output from check-diskfree unless there is at least one "error".
+	
+ -- Steve Kemp <skx@debian.org>  Thu,  20 Nov 2003 09:53:42 +0000
+
+checksecurity (2.0.4) unstable; urgency=low
+
+  * Fixed the last remaining bash-ism.
+    (Closes: #216487) (Closes: #21650) (Closes: #214564) (Closes: #217419)
+  * Depend upon Perl.
+    (Closes: #219363)
+  * Document plugin directory correctly in manpage for checksecurity
+    (Closes: #215758)
+  * Mention 'check-diskfree' in README.Debian
+    (Closes: 218734)
+
+ -- Steve Kemp <skx@debian.org>  Sat,  15 Nov 2003 20:45:02 +0000
+
+checksecurity (2.0.3) unstable; urgency=low
+
+  * Don't use obsolete diff option.
+    (Closes: #214125) Thanks to Aaron Schrab
+  * Only test filesystems for size which start with '/'
+    This means we work with regardless of local.
+    (Closes: #212710) thanks to Hile Tuohela 
+  * Removed several bashisms from check-setuid
+    (Closes: #212650)
+  * Added manpages for `check-diskfree` and `check-passwd`
+
+ -- Steve Kemp <skx@debian.org>  Thur,  09 Oct 2003 22:24:10 +0000
+
+checksecurity (2.0.2) unstable; urgency=low
+
+  * Only test for empty passwords if /etc/shadow exists.
+    (Closes: #212587)
+  * Testing for free disk space now succeeds when the mount point 
+    has a long name.  
+    (Closes: #212388) Thanks to Chung-chieh Shan for the patch.
+  * All relevent files in /etc/ are now marked as conffiles.
+    (Closes: #212586)
+  * Install the manpage into the correct directory.
+  * Ignore mountpoints of type xfs.
+    (Closes: #171980)
+  * Added Japanese debconf tranlations.
+    (Closes: #210712) Thanks to Kenshi Muto for the translation.
+
+ -- Steve Kemp <skx@debian.org>  Wed,  23 Sep 2003 18:44:48 +0000
+
+checksecurity (2.0.1) unstable; urgency=low
+
+  * Fixed the handling of the check-setuid.conf file.
+    (Closes: #212306) thanks to Michael Schuerig
+  * Use ':' instead pf '.' when using chown.
+    (Closes: #205369).
+  * Applied a patch to clearup the check-setuid.conf file.
+    (Closes: #210242) thanks to Andrew Shugg.
+ 
+ -- Steve Kemp <skx@debian.org>  Tue,  22 Sep 2003 10:23:11 +0000
+
+checksecurity (2.0.0) unstable; urgency=low
+
+  * Created new configuration file.
+  * Created makefile installation system.
+
+ -- Steve Kemp <skx@debian.org>  Tue,  26 Aug 2003 20:58:02 +0000
+
+checksecurity (1.0.4) unstable; urgency=low
+
+  * This is the penultimate release before we move to a 
+    more comprensive plugin based system.  You have been
+    warned.
+  * Switched to gettext-based debconf templates
+    (Closes: #205801) thanks to Christian Perrier
+  * Added French translation of gettext templates
+    (Closes: #207117) thanks to Christian Perrier
+  * Fixed typo in checksecurity.conf
+  * Ignore mounts of type "bind"
+    (Closes: #176090) thanks to Martin Schwenke
+
+ -- Steve Kemp <skx@debian.org>  Mon,  25 Aug 2003 23:37:27 +0000
+
+checksecurity (1.0.3) unstable; urgency=low
+
+  * Updated the maintainer field, to make me the effective maintainer.
+
+ -- Steve Kemp <skx@debian.org>  Wed,  16 Jul 2003 08:37:22 +0000
+
+checksecurity (1.0.2) unstable; urgency=low
+
+  * New maintainer.
+
+ -- Steve Kemp <skx@debian.org>  Tues,  14 Jul 2003 09:11:20 +0000
+
+checksecurity (1.0.1) unstable; urgency=low
+
+  * Add overrides file for two lintian warnings. Debconf is used solely
+  to display a message in the postinst on initial installation. It can't
+  be done in the configuration stage because it must happen after the cron
+  install.
+  * Add missing debconf dependency.
+
+ -- Steve Greenland <stevegr@debian.org>  Sun,  8 Jun 2003 15:20:13 -0500
+
+checksecurity (1.0.0) unstable; urgency=low
+
+  * Split from cron package
+  * Only rotate setuid.changes if size > 0 (closes: #176995)
+
+ -- Steve Greenland <stevegr@debian.org>  Sun,  8 Jun 2003 15:18:08 -0500

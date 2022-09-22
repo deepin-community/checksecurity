@@ -1,0 +1,40 @@
+# Turkish translation of checksecurity package
+# Copyright (C) 2014 Mert Dirik
+# This file is distributed under the same license as the checksecurity package.
+# Mert Dirik <mertdirik@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: checksecurity 2.0.15\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-04 14:39+0000\n"
+"PO-Revision-Date: 2014-08-30 22:42+0200\n"
+"Last-Translator: Mert Dirik <mertdirik@gmail.com>\n"
+"Language-Team: Debian L10n Turkish <debian-l10n-turkish@lists.debian.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Merge old configuration"
+msgstr "Eski yapılandırmayı birleştir"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"This is your initial install of the checksecurity package, and you had an "
+"existing checksecurity.conf file from the cron package. The old "
+"configuration file was preserved as \"/etc/checksecurity.conf.cron\". If you "
+"had modified your configuration, you may want to merge those changes into "
+"the new /etc/checksecurity.conf file from this package."
+msgstr ""
+"'checksecurity' paketini ilk defa kuruyorsunuz ve sisteminizde cron "
+"paketinden kaynaklı bir checksecurity.conf dosyası mevcut. Eski yapılandırma "
+"dosyası \"/etc/checksecurity.conf.cron\" konumunda saklanacak. Eğer bu "
+"yapılandırmayı değiştirdiyseniz, yaptığınız değişiklikleri yeni /etc/"
+"checksecurity.conf dosyası ile birleştirmek isteyebilirsiniz."

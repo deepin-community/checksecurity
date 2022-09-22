@@ -1,0 +1,92 @@
+
+  Move to 'standard' priority. (post-sarge)
+   * Set this package to 'standard' priority, we want our users to have a
+    limited set of security checks by default even those the ones provided
+    here still need to be improved (Closes: #197563)
+
+  Document the code properly. 
+   - Include also documentation of new options 
+     ('debug' through GetStdd::Long)
+   - The 'period' optional argument in checksecurity needs to be
+     added to the manpage
+
+  - Write a manpage for check-socket
+
+  Fix errors in setuid script:
+   - Specially #257395 and #102186, the first
+   one spouts false negatives and the second one
+   makes the check fail sometimes in network drives.
+    
+  Add getopt processing for checksecurity.
+  - DONE but undocumented
+
+  Add more tests.
+  See #163813 and the following discussions:
+  http://lists.debian.org/debian-devel/2002/12/msg01517.html
+  and
+  http://lists.debian.org/debian-devel/2002/12/msg01566.html
+
+  See also
+  - OpenBSD /etc/security
+  http://www.openbsd.org/cgi-bin/cvsweb/src/etc/security?rev=1.54&content-type=text/x-cvsweb-markup
+  - SuSE's seccheck
+   http://www.suse.de/~marc/seccheck.html
+   - Mandrake's msec
+   http://freshmeat.net/projects/msec/
+ 
+-------------------------------------------------------------------------
+
+  Currently checksecurity will *only* do checks regarding SUID files which
+  is kind of misleading (since one would like 'checksecurity' to be a
+  security check and not just that).
+
+  While reading an article about Security in Linux distributions [1] y found
+  out that SUSE's checksecurity [2] will do quite a little bit more and it
+  is, in fact, GPLd (what a surprise, available here [3])
+
+  I would like checksecurity to do more than SUID changes. I'm not sure,
+  however, of which features should be enabled by default. Some of this
+  checks are already done by Tiger (see [4]) and I'm not sure I want
+  checksecurity to do all of them (since they might be a little too much)
+
+From seccheck's README:
+
+The following daily checks are done:
+ /etc/passwd check : length/number/contents of fields, accounts with same uid
+			accounts with uid/gid of 0 or 1 beside root and bin
+ /etc/shadow check : length/number/contents of fields, accounts with no password
+ /etc/group check  : length/number/contents of fields
+ user root checks  : secure umask and PATH
+ /etc/ftpusers     : checks if important system users are put there
+ /etc/aliases      : checks for mail aliases which execute programs
+ .rhosts check     : checks if users' .rhosts file contain + signs
+ homedirectory     : checks if homedirectories are writable or owned by
+			someone else
+ dot-files check   : checks many dot-files in the homedirectories if they
+			are writable or owned by someone else
+ mailbox check     : checks if user mailboxes are owned by user and unreadable
+ NFS export check  : exports should not be exported globaly
+ NFS import check  : NFS mounts should have the "nosuid" option set
+ promisc check     : checks if network cards are in promiscious mode
+ list modules      : just lists loaded modules
+ list sockets      : just lists open ports
+
+The following weekly checks are done:
+ password check    : runs john to crack the password file, user will get an
+			email notice to change his password asap
+ rpm md5 check     : checks for changed files via rpm's md5 checksum feature
+ suid/sgid check   : lists all suid and sgid files
+ exec group write  : lists all executables which are group/world writeable
+ writable check    : lists all files which are world writable (incl.  above)
+ device check      : lists all devices
+
+The following monthly things are done:
+ The monthly file is not a diff like the daily/weekly ones but the full
+ reports in one file.
+
+[1] http://www.linuxjournal.com/article.php?sid=6362&mode=thread&order=0
+
+-------------------------------------------------------------------------
+
+Tue, 15 Mar 2005 01:53:52 +0100
+Javier Fernandez-Sanguino

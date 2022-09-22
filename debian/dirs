@@ -1,0 +1,6 @@
+etc
+etc/checksecurity
+usr/sbin
+usr/share/checksecurity
+usr/share/man/man8
+usr/share/lintian/overrides

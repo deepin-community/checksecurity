@@ -1,0 +1,8 @@
+Template: checksecurity/oldconf
+Type: note
+_Description: Merge old configuration
+ This is your initial install of the checksecurity package, and you had an
+ existing checksecurity.conf file from the cron package. The old
+ configuration file was preserved as "/etc/checksecurity.conf.cron". If you
+ had modified your configuration, you may want to merge those changes into
+ the new /etc/checksecurity.conf file from this package.

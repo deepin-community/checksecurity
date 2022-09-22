@@ -1,0 +1,37 @@
+.\" -*- nroff -*-
+.TH CHECK-DISKFREE 8 "2 February 1997" "Debian Linux"
+.SH NAME
+check-free \- check for mounted filesystems nearing capacity
+.SH SYNOPSIS
+.B check-diskfree
+.SH DESCRIPTION
+The
+.B check-diskfree
+is a plugin run by the
+.B checksecurity
+command. It scans mounted filesystems and allows alerts to be sent when 
+usage exceeds a given threshold.
+This is a plugin which is invoked by
+.B checksecurity (8)
+if enabled.
+
+.SH CONFIGURATION
+The
+.B check-diskfree.conf
+file defines the configuration variable:
+.BR CHECK_DISK_PERCENT
+which is described below.
+.PP
+The 
+.B CHECK_DISK_PERCENT
+variable is the percentage full the filesystem must be before an alert is
+sent.
+Valid values are any numerical value between 1 and 100.
+
+.SH FILES
+.TP
+.I /etc/checksecurity.conf
+Specifies whether this script is invoked
+.TP
+.I /etc/checksecurity/check-diskfree.conf
+The configuration file.

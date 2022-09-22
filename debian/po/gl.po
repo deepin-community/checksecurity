@@ -1,0 +1,37 @@
+# Galician translation of checksecurity's debconf templates
+# This file is distributed under the same license as the checksecurity package.
+# Jacobo Tarrio <jtarrio@debian.org>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: checksecurity\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-23 17:13+0100\n"
+"PO-Revision-Date: 2007-03-05 09:19+0100\n"
+"Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Merge old configuration"
+msgstr "Inclúa a configuración antiga"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"This is your initial install of the checksecurity package, and you had an "
+"existing checksecurity.conf file from the cron package. The old "
+"configuration file was preserved as \"/etc/checksecurity.conf.cron\". If you "
+"had modified your configuration, you may want to merge those changes into "
+"the new /etc/checksecurity.conf file from this package."
+msgstr ""
+"Esta é a súa instalación inicial do paquete checksecurity, pero xa tiña un "
+"ficheiro checksecurity.conf do paquete cron. O ficheiro de configuración "
+"antigo conservouse coma \"/etc/checksecurity.conf.cron\". Se modificou esa "
+"configuración, pode interesarlle incluír eses cambios no novo ficheiro /etc/"
+"checksecurity.conf deste paquete."

@@ -1,0 +1,47 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: checksecurity_2.0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-23 17:13+0100\n"
+"PO-Revision-Date: 2006-11-26 16:58-0200\n"
+"Last-Translator: Felipe Augusto van de Wiel (faw) <faw@cathedrallabs.org>\n"
+"Language-Team: l10n portuguese <debian-l10n-portuguese@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"pt_BR utf-8\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Merge old configuration"
+msgstr "Unir com a configuração antiga"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"This is your initial install of the checksecurity package, and you had an "
+"existing checksecurity.conf file from the cron package. The old "
+"configuration file was preserved as \"/etc/checksecurity.conf.cron\". If you "
+"had modified your configuration, you may want to merge those changes into "
+"the new /etc/checksecurity.conf file from this package."
+msgstr ""
+"Esta é sua instalação inicial do pacote checksecurity e você possuía um "
+"arquivo checksecurity.conf fornecido pelo pacote cron. O antigo arquivo de "
+"configuração foi preservado com o nome de \"/etc/checksecurity.conf.cron\". "
+"Caso você tenha modificado sua configuração, você pode querer unir suas "
+"mudanças no novo arquivo /etc/checksecurity.conf deste pacote."

@@ -1,0 +1,49 @@
+#!/usr/bin/make -f
+# 
+# Rules file for checksecurity
+#
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	dh_clean
+
+# Build architecture-independent files here.
+binary-arch: build
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-indep: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	$(MAKE) install PREFIX=$(CURDIR)/debian/checksecurity
+	install -m 644 debian/overrides debian/checksecurity/usr/share/lintian/overrides/checksecurity
+	dh_installdocs 
+	dh_installcron
+	dh_installlogrotate
+	dh_installchangelogs 
+	dh_installdebconf
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+source diff:                                                                  
+	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary

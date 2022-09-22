@@ -1,0 +1,24 @@
+checksecurity
+-------------
+
+Checksecurity has been spinned of cron (that's why it Replaces/Depends on it)
+however, old version of the cron package provided the checksecurity.conf
+configuration file. Due to the way dpkg handles conffiles in this
+cases 'checksecurity' will manage that conffile himself.
+
+There are several reasons for this:
+
+a) Dpkg gives bogus warnings: 
+	If you have NOT changed the checksecurity.conf file
+	that was distributed with cron, but have an updated version in the
+	new checksecurity package, dpkg reports that the local file has been
+	modified by the user. That's bogus and confusing. The fact that the
+	tetex maintainer does it all the time does not make it acceptable.
+b) Under some factors, the conffile might get "lost"
+
+For more information read:
+http://lists.debian.org/debian-devel/2003/debian-devel-200305/msg01313.html
+
+---
+Javier Fernandez-Sanguino
+March 14th, 2004

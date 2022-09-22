@@ -1,0 +1,49 @@
+#!/bin/sh
+# /etc/cron.daily/checksecurity: Run the checksecurity script
+# Steve Greenland <stevegr@debian.org>
+
+LOCKFILE=/var/lock/checksecurity.daily
+
+# The logfile we write our changes into.
+LOGFILE=/var/log/checksecurity.log
+umask 022
+
+#
+# Exit silently if the checksecurity package is not installed. (We may be
+# here just because we're conffile left over from a previous installation).
+#
+[ -e /usr/sbin/checksecurity ] || exit 0
+#
+
+#
+# Avoid running more than one at a time -- could happen if the
+# checksecurity script lands on a network drive.
+#
+
+if [ -x /usr/bin/lockfile-create ] ; then
+    lockfile-create $LOCKFILE
+    if [ $? -ne 0 ] ; then
+	cat <<EOF
+
+Unable to run /etc/cron.daily/checksecurity because lockfile $LOCKFILE
+acquisition failed. This probably means that the previous days instance
+is still running. Please check and correct if necessary.
+
+EOF
+	exit 1
+    fi
+
+    # Keep lockfile fresh
+    lockfile-touch $LOCKFILE &
+    LOCKTOUCHPID="$!"
+fi
+
+checksecurity daily >>"$LOGFILE"
+
+#
+# Clean up lockfile
+#
+if [ -x /usr/bin/lockfile-create ] ; then
+    kill $LOCKTOUCHPID
+    lockfile-remove $LOCKFILE
+fi

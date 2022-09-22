@@ -1,0 +1,35 @@
+# Vietnamese Translation for checksecurity.
+# Copyright © 2005 Free Software Foundation, Inc.
+# Clytie Siddall <clytie@riverland.net.au>, 2005.
+# 
+msgid ""
+""
+msgstr "Project-Id-Version: checksecurity 2.0.7-6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-23 17:13+0100\n"
+"PO-Revision-Date: 2006-11-24 18:52+1030\n"
+"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
+"Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Mac PO Editor 1.0a9"
+
+#.Type: note
+#.Description
+#: ../templates:1001
+msgid "Merge old configuration"
+msgstr "Trộn cấu hình cũ"
+
+#.Type: note
+#.Description
+#: ../templates:1001
+msgid ""
+"This is your initial install of the checksecurity package, and you had an "
+"existing checksecurity.conf file from the cron package. The old "
+"configuration file was preserved as \"/etc/checksecurity.conf.cron\". If you "
+"had modified your configuration, you may want to merge those changes into "
+"the new /etc/checksecurity.conf file from this package."
+msgstr "Đây là lần đầu tiên cài đặt gói checksecurity (kiểm tra bảo mật), còn bạn đã có "
+"một tập tin cấu hình « checksecurity.conf » cũ từ gói « cron ». Tập tin cấu hình cũ này đã được giữ lại dạng « /etc/checksecurity.conf.cron ». Nếu bạn đã sửa đổi cấu hình chưa thì có thể muốn trộn các thay đổi đó với tập tin « /etc/checksecurity.conf » mới của gói này."

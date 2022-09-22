@@ -1,0 +1,214 @@
+#!/usr/bin/perl 
+#
+# Debian's checksecurity.
+# Runs a set of plugins which check the security of an installed 
+# system.
+#
+# (c) 2003-2005 Steve Kemp <skx@debian.org>, http://www.steve.org.uk 
+# (c) 2005      Javier Fernandez-Sanguino <jfs@debian.org>
+# Licensed under the GNU General Public License
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+
+use strict;
+use Env;
+use Getopt::Long;
+my $opt_debug = 0;
+GetOptions(
+  'debug!'   => \$opt_debug,
+);
+
+# Are we root?
+if ( $> != 0 ) {
+	print STDERR "Sorry, only root can run checksecurity";
+	exit 1;
+}
+
+#
+#  The fixed settings we work with.
+#
+my $CONFIG     = "/etc/checksecurity.conf";
+my $PLUGIN_DIR = "/usr/share/checksecurity";
+my $VERSION    = "2.0.7";
+
+# Argument determine which checks will be run
+my $period     = "all";
+$period = $ARGV[0] if defined $ARGV[0];
+# Accepted periods
+if ( $period !~ /^(all|daily|weekly)$/ ) {
+	print STDERR "Unknown period requested ($period) reverting to 'all'\n";
+	$period = "all";
+}
+
+
+# Copy of the environmental variables.
+my %SAFE_ENV   = %ENV;
+
+# Environmental settings we read from the configuration file.
+my %GLOBAL_ENV = ();
+
+# The environment that we send to the plugins we call.
+my %PLUGIN_ENV = ();
+
+
+
+#
+# Source the configuration file.
+#
+if ( -e $CONFIG )
+{
+    %GLOBAL_ENV = readConfig( $CONFIG );
+}
+else
+{
+    print <<E_O_F;
+  The global configuration file that checksecurity wishes to read
+ in order to know which plugins are enabled is missing.
+
+  Please see man checksecurity(8) for details of the contents
+ this file should have.
+
+  Aborting.
+E_O_F
+}
+
+
+
+#
+# Look for plugins
+#
+foreach my $file (glob( $PLUGIN_DIR . "/check-*" ) )
+{
+    # Skip dotfiles.
+    next if ( $file =~ /^\./ );
+
+    my $name = "";
+
+    if ( $file =~ /(.*)check-(.*)/ )
+    {
+	$name = $2;
+    }
+
+    $name = uc( $name );
+    print "Checking plugin $name\n" if $opt_debug;
+
+    # Are we configured to run it in this period?
+    next if ( $period ne "all" && $GLOBAL_ENV{ "CHECK_".uc($period) } !~ /$name/ );
+
+    # See if the plugin is enabled.
+    if ( $GLOBAL_ENV{ "CHECK_$name" } eq "TRUE" ) 
+    {
+	# Determine the configuration file this plugin wishes to use.
+	$name = lc( $name );
+	my $conf = "/etc/checksecurity/check-$name.conf";
+
+	# Reset to the known good environment.
+	%ENV  = %SAFE_ENV;
+
+
+	if ( -e $conf )
+	{
+	    %PLUGIN_ENV= &readConfig( $conf );
+	}
+	else
+	{
+	    %PLUGIN_ENV = ();
+	}
+
+	# Setup the environment
+	foreach my $k ( keys( %PLUGIN_ENV) )
+	{
+	    $ENV{$k} = $PLUGIN_ENV{$k};
+	}
+
+        # We inherit the CHECKSECURITY_EMAIL environment from the global
+        # file if the script does not redefine it.
+        if ( ! defined $ENV{'CHECKSECURITY_EMAIL'} && defined $GLOBAL_ENV{'CHECKSECURITY_EMAIL'} ) {
+            $ENV{'CHECKSECURITY_EMAIL'} = $GLOBAL_ENV{'CHECKSECURITY_EMAIL'};
+        }
+
+	# Execute the file.
+        print "Executing plugin $name ($file)\n" if $opt_debug;
+	system( $file );
+    }
+    else
+    {
+	print "Plugin $name Disabled\n" if $opt_debug;
+        print "Value was ".$GLOBAL_ENV{ "CHECK_$name" } . "\n" if $opt_debug;
+    }
+}
+
+
+#
+#  Read a name=value configuration file, and return a hash containing
+# each of values keys.
+#
+sub readConfig( $ )
+{
+    my ( $file ) = ( @_ );
+
+    my %HASH;
+    open( FILY, "<$file" ) or die "Cannot open file: $file - $!";
+
+    my $line       = ""; 
+    my $lineCount  = 0;
+
+    while (defined($line = <FILY>) ) 
+    {
+        chomp $line;
+	if ($line =~ s/\\$//) 
+	{
+	    $line .= <FILY>;
+	    redo unless eof(FILY);
+	}
+      
+	# Skip lines beginning with comments
+	next if ( $line =~ /^([ \t]*)\#/ );
+
+	# Skip blank lines
+	next if ( length( $line ) < 1 );
+
+	# Strip trailing comments.
+	if ( $line =~ /(.*)\#(.*)/ )
+	{
+	    $line = $1;
+	}
+
+	# Find variable settings
+	if ( $line =~ /([^=]+)=([^\n]+)/ )
+	{
+	    my $key = $1;
+	    my $val = $2;
+
+	    # Strip leading and trailing whitespace.
+	    $key =~ s/^\s+//;
+	    $key =~ s/\s+$//;
+	    $val =~ s/^\s+//;
+	    $val =~ s/\s+$//;
+	    
+	    # Strip enclosing "'s
+	    if ( $val =~ /^['"](.*)['"]$/ )
+	    {
+		$val = $1;
+	    }
+
+	    # Store value.
+	    $HASH{ $key } = $val;
+	}
+    }
+    close(FILY);
+    return(%HASH);
+}

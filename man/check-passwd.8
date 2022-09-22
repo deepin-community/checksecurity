@@ -1,0 +1,50 @@
+.\" -*- nroff -*-
+.TH CHECK-PASSWD 8 "2 February 1997" "Debian Linux"
+.SH NAME
+check-passwd \- check for empty or duplicate system accounts.
+.SH SYNOPSIS
+.B check-passwd
+.SH DESCRIPTION
+The
+.B check-passwd
+is a plugin run by the
+.B checksecurity
+command. It scans the system password file, and looks for either duplicate
+accounts or accounts without a password set.
+This is a plugin which is invoked by
+.B checksecurity (8)
+if enabled.
+
+.SH CONFIGURATION
+The
+.B check-passwd.conf
+file defines the configuration variables:
+.BR CHECK_PASSWORD_WARN_UIDS 
+and
+.BR CHECK_PASSWORD_WARN_DUPLICATES
+Each is described below.
+.PP
+The 
+.B CHECK_PASSWORD_WARN_EMPTY
+variable controls whether this script will warn about accounts with empty
+passwords.
+Valid values are
+.B TRUE
+or
+.B FALSE
+The 
+.B CHECK_PASSWORD_WARN_UIDS
+variable controls whether this script will warn about duplicate accounts
+sharing the same UID within the passwords file.
+Valid values are
+.B TRUE
+or
+.B FALSE
+
+.SH FILES
+.TP
+.I /etc/checksecurity.conf
+Specifies whether this script is invoked
+.TP
+.I /etc/checksecurity/check-passwd.conf
+The configuration file.

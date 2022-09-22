@@ -1,0 +1,61 @@
+#! /bin/sh
+# 
+# Check-diskfree checksecurity plugin
+#
+# This script is designed to analyse the usage of the different
+# disks in the system.
+#
+# It is part of the 'checksecurity' package, and tests may be configured
+# by the global file '/etc/checksecurity.conf' and the file
+# '/etc/checksecurity/check-diskfree.conf'.
+#
+# Copyright (C) 2003-2005 Steve Kemp <skx@debian.org>
+#
+# Licensed under the GNU General Public License
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+# Sane default, just in case
+[ -z "$CHECK_DISK_PERCENT" ] && CHECK_DISK_PERCENT=90
+[ -z "$LOGDIR" ] && LOGDIR=/var/log
+
+# Temporary file
+[ ! -d /var/run/checksecurity ] && { umask 022; mkdir -p /var/run/checksecurity; }
+TMPDF=/var/run/checksecurity/diskfree.log.tmp
+>$TMPDF
+
+
+df -klP |
+grep ^/ |
+grep -v /media/ |
+sed -e 's/.*[[:space:]]\([[:digit:]]\+\)%/\1/' |
+while read PERC LOCATION; do
+ if [ "$PERC" -gt "$CHECK_DISK_PERCENT"  ]; then
+  echo "Usage warning on $CHECK_DISK_PERCENT"  >>$TMPDF
+  echo "${PERC}% ALERT - $LOCATION"  >>$TMPDF
+ fi
+done 
+
+# The default behaviour is to output to stdout
+cat $TMPDF
+
+if [ -s "$TMPDF" ] && [ ! -z "$CHECKSECURITY_EMAIL" ]; then
+  /usr/bin/mail -s "Diskfree alert for `hostname -f` on `date '+%D %T'`" $CHECKSECURITY_EMAIL < $TMPDF
+fi
+
+
+mv $TMPDF $LOGDIR/diskfree.log
+
+exit 0

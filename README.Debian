@@ -1,0 +1,56 @@
+
+checksecurity
+-------------
+
+  checksecurity is a simple package which will scan your system
+ for several simple security holes.
+
+  It uses a simple collection of plugins, all of which are shell 
+ scripts which are configured by environmental variables.
+
+  This release is the first release featuring this modularisation
+ so there may well be bugs lying the code.
+
+
+
+Plugins
+-------
+
+  Plugins are located in /usr/share/checksecurity, with a prefix
+ of 'check-'.  These files are each given the contents of the
+ configuration file '/etc/checksecurity/name.conf' in their
+ environment.
+
+  The scripts and configuration files are all documented in the
+ included in manpages.
+
+
+  
+Tests
+-----
+
+  Currently the plugins supplied perform the following tests:
+
+
+  check_passwd:
+  	* Check for more than one UID 0 account in /etc/passwd
+	* Check for accounts with no passwords.
+	* Check for accounts with login == password.
+
+  check_setuid:
+	* Check permissions on setuid files within the system.
+
+  check_diskfree
+	* Check that all mounted partitions do not exceed a given threshold
+          of used space.
+
+Feedback
+--------
+
+  Ideas and contributed scripts would be appreciated.
+
+
+
+Steve
+--
+www.steve.org.uk

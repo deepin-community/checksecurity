@@ -1,3 +1,26 @@
+checksecurity (2.0.16+nmu4) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Convert to source format 3.0. (Closes: #1007335)
+
+ -- Bastian Germann <bage@debian.org>  Fri, 13 Oct 2023 19:08:08 +0000
+
+checksecurity (2.0.16+nmu3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix "missing required debian/rules targets build-arch and/or build-
+    indep": Add targets to debian/rules.
+    (Closes: #999082)
+  * Fix "Removal of obsolete debhelper compat 5 and 6 in bookworm":
+    Bump to 7 in debian/{compat,control}.
+    (Closes: #965448)
+  * Fix some grave packaging errors:
+    - move debhelper from Build-Depends-Indep to Build-Depends
+    - remove temporary files debian/postrm.debhelper and debian/substvars from
+      source package
+
+ -- gregor herrmann <gregoa@debian.org>  Sun, 26 Dec 2021 01:56:10 +0100
+
 checksecurity (2.0.16+nmu2) unstable; urgency=medium
 
   * Non maintainer upload by the Reproducible Builds team.

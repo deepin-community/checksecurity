@@ -3,7 +3,7 @@ Section: admin
 Priority: optional
 Maintainer: Javier Fernández-Sanguino Peña <jfs@computer.org>
 Standards-Version: 3.6.1
-Build-Depends-Indep: debhelper (>= 4.1.16)
+Build-Depends: debhelper (>= 7)
 
 Package: checksecurity
 Architecture: all
